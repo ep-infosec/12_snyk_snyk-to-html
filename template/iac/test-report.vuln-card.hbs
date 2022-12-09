@@ -1,0 +1,82 @@
+<div class="card card--vuln  disclosure--not-new severity--{{severity}}" data-snyk-test="{{severity}}">
+    <h2 class="card__title">{{title}}</h2>
+    <div class="card__section">
+
+        <div class="label label--{{severity}}">
+            <span class="label__text">{{severity}} severity</span>
+        </div>
+
+        <hr/>
+
+        <ul class="card__meta">
+            <li class="card__meta__item">
+                Public ID: {{#if documentation}}<a href="{{documentation}}">{{publicId}}</a>{{else}}{{publicId}}{{/if}} 
+            </li>
+
+            <li class="card__meta__item">Introduced through:
+                {{#each path}}
+                    {{this}}
+                    {{#unless @last}} <span class="list-paths__item__arrow">›</span> {{/unless}}
+                {{/each}}
+            </li>
+
+            {{#ifCond lineNumber '>' -1}}
+            <li class="card__meta__item">
+                Line number: {{lineNumber}}
+            </li>
+            {{/ifCond}}
+        </ul>
+
+        {{#if impact}}
+        <hr/>
+        {{else if resolve}}
+        <hr/>
+        {{else}}
+        {{#ifCond (count references) '>' 0}}
+        <hr/>
+        {{/ifCond}}
+        {{/if}}
+
+        {{#unless @root.showSummaryOnly}}
+            {{#if impact}}
+            <h2>Impact</h2>
+            <p>{{impact}}</p>
+            {{/if}}
+
+            {{#if resolve}}
+            <h2>Remediation</h2>
+            <p>{{resolve}}</p>
+            {{/if}}
+
+            {{#ifCond (count references.length) '>' 0}}
+            <h2>References</h2>
+            <ul>
+                {{#each references}}
+                    {{#startsWith this "https://" }}
+                        <li><a href="{{this}}">{{this}}</a></li>
+                    {{else}}
+                        <li>{{this}}</li>
+                    {{/startsWith}}
+                {{/each}}
+            </ul>
+            {{/ifCond}}
+
+            {{#if impact}}
+            <hr/>
+            {{else if resolve}}
+            <hr/>
+            {{else}}
+            {{#ifCond (count references) '>' 0}}
+            <hr/>
+            {{/ifCond}}
+            {{/if}}
+        {{/unless}}
+    </div><!-- .card__section -->
+
+    <div class="cta card__cta">
+        {{#if documentation}}
+        <p><a href="{{documentation}}">More about this issue</a></p>
+        {{/if}}
+    </div>
+
+</div><!-- .card -->
